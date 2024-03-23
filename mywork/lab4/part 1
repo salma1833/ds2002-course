@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Upload image script
+aws s3 mb s3://ds2002-sa2qt
+curl https://dynaimage.cdn.cnn.com/cnn/c_fill,g_auto,w_1200,h_675,ar_16:9/https%3A%2F%2Fcdn.cnn.com%2Fcnnnext%2Fdam%2Fassets%2F200617130257-01-uva-reworked-logo-0616.jpg > uva.jpg
+aws s3 cp uva.jpg s3://ds2002-sa2qt/
+aws s3 ls s3://ds2002-sa2qt/
+
+presigned_URL=$(aws s3 presign --expires-in 604800 s3://ds2002-sa2qt/uva.jpg)
+
+echo "Presigned URL: $presigned_URL"
+
+# Presigned URL
+# https://ds2002-sa2qt.s3.us-east-1.amazonaws.com/uva.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAXYKJUGQXTXQDBDJL%2F20240323%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240323T023154Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Security-Token=FwoGZXIvYXdzEEwaDAuTQyH9UNMIaa0yZyLDAfe9sw6SbBOH%2BpE7r9AWPrwz14d%2FRW9qEKR4bn5VzCWxOk1p2ErTbDIK4zmdxUpJXfySHTH8jJ4cVphnqG4nSKLNVJd249jQgooJKyzgOBYRI%2BhwdhWH395S7iDD4yXEgMevAnMKs5WlQjDE%2BlI2Y%2B90S4g2B8H5gFtexZdnRo36w%2F36F2YTcEODUh9nPuR94EFHIhOk8%2Fhgmn%2FVP4%2FLj5KgtMLcYZPMbmRpCs8azG%2BhrlFn4x4yUOEgzAIL2RYD%2FxRa4SiF8vivBjItmDrbyRo%2Fgy31Ql1IaGbtKLgCspHBwX8QXYMbE6ePPtqzJicZFmJnVF%2BVQqOe&X-Amz-Signature=47648957c63405b400124426addd28fa880d96f3e4b365c720d21cf41166510b
+
+aws s3 mb s3://ds2002-sa2qt
+curl -o uva2.jpg https://dynaimage.cdn.cnn.com/cnn/c_fill,g_auto,w_1200,h_675,ar_16:9/https%3A%2F%2Fcdn.cnn.com%2Fcnnnext%2Fdam%2Fassets%2F200617130257-01-uva-reworked-logo-0616.jpg
+aws s3 cp --acl public-read uva2.jpg s3://ds2002-sa2qt/
+
+public_URL=$(aws s3 presign --expires-in 604800 s3://ds2002-sa2qt/uva2.jpg)
+
+
+echo "Public URL: $public_URL"
+# Public URL
+# https://ds2002-sa2qt.s3.us-east-1.amazonaws.com/uva2.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAXYKJUGQXTXQDBDJL%2F20240323%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240323T023157Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Security-Token=FwoGZXIvYXdzEEwaDAuTQyH9UNMIaa0yZyLDAfe9sw6SbBOH%2BpE7r9AWPrwz14d%2FRW9qEKR4bn5VzCWxOk1p2ErTbDIK4zmdxUpJXfySHTH8jJ4cVphnqG4nSKLNVJd249jQgooJKyzgOBYRI%2BhwdhWH395S7iDD4yXEgMevAnMKs5WlQjDE%2BlI2Y%2B90S4g2B8H5gFtexZdnRo36w%2F36F2YTcEODUh9nPuR94EFHIhOk8%2Fhgmn%2FVP4%2FLj5KgtMLcYZPMbmRpCs8azG%2BhrlFn4x4yUOEgzAIL2RYD%2FxRa4SiF8vivBjItmDrbyRo%2Fgy31Ql1IaGbtKLgCspHBwX8QXYMbE6ePPtqzJicZFmJnVF%2BVQqOe&X-Amz-Signature=815ced7d4eef220440eb3b469db44c81f666cad3609b6fafbd33485c39c33409
+
+# Delete file and bucket
+aws s3 rm s3://ds2002-mst3k/https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png
+aws s3 rm s3://ds2002-sa2qt/ --
