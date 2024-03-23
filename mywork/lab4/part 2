@@ -1,0 +1,16 @@
+import boto3
+import requests
+
+s3 = boto3.client('s3', region_name="us-east-1")
+
+url = 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbGp1YTVyZm1jc3JxN2d0bWFnNGc5YXE0bm9uN3UxNnp1Mjg5eXE3aSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/mlvseq9yvZhba/giphy.gif'
+response = requests.get(url)
+file_content = response.content
+
+bucket = 'ds2002-sa2qt'
+key = 'cat.gif'
+resp = s3.put_object(Body=file_content, Bucket=bucket, Key=key)
+
+presigned_url = s3.generate_presigned_url('get_object', Params={'Bucket': bucket, 'Key': key}, ExpiresIn=604800)
+
+print('Presigned URL:', presigned_url)
